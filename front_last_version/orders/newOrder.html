@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./../css/main.css">
+    <title>Order</title>
+	<script>
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+		 fetch('http://127.0.0.1:8001/manager/product/get', {
+					  method: "GET", // *GET, POST, PUT, DELETE, etc.
+					mode: "cors", // no-cors, *cors, same-origin
+					cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: "same-origin", // include, *same-origin, omit
+					headers: {
+					  "Content-Type": "application/json",
+					  "X-Token":getCookie('X-Token'),
+					  "userid":getCookie('userid'),
+					  "lang":"en"
+					  // 'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					redirect: "follow", // manual, *follow, error
+					referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                  })
+                  .then(resp => resp.json()) // or, resp.json(), etc.
+                  .then(data => {					
+						var select = document.getElementById("slistbook");
+					data.forEach((book) => {
+								var option = document.createElement("option"),
+									txt = document.createTextNode(book.name);
+								option.appendChild(txt);
+								option.setAttribute("value",book.product_id);
+								select.insertBefore(option,select.lastChild);
+								});	
+                  })
+                  .catch(error => {
+                     console.error(error);
+                  });
+         document.addEventListener('DOMContentLoaded', (event) => {
+
+            document.getElementById("myForm").addEventListener("submit", function (e) {
+               e.preventDefault() // Cancel the default action
+
+			   var bookSelect = document.getElementById('slistbook');
+			   
+				var value = bookSelect.options[bookSelect.selectedIndex].value;
+			   var quantity = document.getElementById('quantity').value;
+			   var productValue = [];
+			   productValue.push(value);
+			   var quantityValue = [];
+			   quantityValue.push(quantity);
+			   
+			   const data = { quantities: quantityValue, product_ids:productValue,price:0};
+               	fetch('http://127.0.0.1:8001/manager/order/create', {
+					  method: "POST", // *GET, POST, PUT, DELETE, etc.
+					mode: "cors", // no-cors, *cors, same-origin
+					cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: "same-origin", // include, *same-origin, omit
+					headers: {
+					  "Content-Type": "application/json",
+					  "X-Token":getCookie('X-Token'),
+					  "userid":getCookie('userid'),
+					  "lang":"en"
+					  // 'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					redirect: "follow", // manual, *follow, error
+					referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+					body: JSON.stringify(data), // body data type must match "Content-Type" header
+                  })
+                  .then(resp => resp.json()) // or, resp.json(), etc.
+                  .then(data => {
+			window.location.href = 'newOrder.html';
+                  })
+                  .catch(error => {
+                     console.error(error);
+                  });
+            });
+         });
+      </script>
+</head>
+
+<body>
+    <div class="navBar">
+        <a class="logo" href="home.html">
+            <span>Library</span>
+            <span>Online Store</span>
+        </a>
+
+        <div class="menuButton">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="menu menuCul">
+            <ul class="links">
+                <li><a href="./../home.html">Home</a></li>
+                <li><a href="./../products/productsPage.html">Products</a></li>
+                <li><a href="orderPage.html">Order</a></li>
+                <li><a href="./../basket.html">Basket</a></li>
+            </ul>
+
+            <input type="search" id="search" class="search" placeholder="search a book">
+        </div>
+    </div>
+
+    <div class="hero">
+        <h1>Order</h1>
+        <p>You can click on Select a book to chose a book and Request a quantity to chose the quantity</p>
+        <div class="space">
+            <form action="#" method="get"   id="myForm">
+                <div class="">
+                    <label for="bookSelect"></label>
+					 <select id="slistbook">
+						  <option value="default">Select a Book</option>
+					 </select>
+                </div>
+                <div class="">
+                    <label for="quantity"></label>
+                    <input type="text" name="quantity" id="quantity" placeholder="Request quantity" required>
+                </div>
+                <button type="submit">Search</button>
+                <button type="submit">Order</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <ul>
+            <li><a href="./../home.html">Home</a></li>
+            <li><a href="./../products/productsPage.html">Products</a></li>
+            <li><a href="orderPage.html">Order</a></li>
+            <li><a href="./../basket.html">Basket</a></li>
+        </ul>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

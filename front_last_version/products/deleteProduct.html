@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./../css/main.css">
+    <title>Delete Product</title>
+	<script>
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+         document.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById("myForm").addEventListener("submit", function (e) {
+               e.preventDefault() // Cancel the default action
+
+			   var productId = document.getElementById('productId').value;
+			   const data = { productId: productId};
+               			fetch('http://127.0.0.1:8001/manager/product/delete/'+productId, {
+					  method: "POST", // *GET, POST, PUT, DELETE, etc.
+					mode: "cors", // no-cors, *cors, same-origin
+					cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: "same-origin", // include, *same-origin, omit
+					headers: {
+					  "Content-Type": "application/json",
+					  "X-Token":getCookie('X-Token'),
+					  "userid":getCookie('userid'),
+					  "lang":"en"
+					  // 'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					redirect: "follow", // manual, *follow, error
+					referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+					body: JSON.stringify(data), // body data type must match "Content-Type" header
+                  })
+                  .then(resp => resp.json()) // or, resp.json(), etc.
+                  .then(data => {
+			window.location.href = 'deleteProduct.html';
+                  })
+                  .catch(error => {
+                     console.error(error);
+                  });
+            });
+         });
+      </script>	
+</head>
+
+<body>
+    <div class="navBar">
+        <a class="logo" href="../../home.html">
+            <span>Library</span>
+            <span>Online Store</span>
+        </a>
+
+        <div class="menuButton">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="menu menuCul">
+            <ul class="links">
+                <li><a href="./../home.html">Home</a></li>
+                <li><a href="productsPage.html">Products</a></li>
+                <li><a href="./../orders/orderPage.html">Order</a></li>
+                <li><a href="./../basket.html">Basket</a></li>
+            </ul>
+            <label for="search"></label>
+            <input type="search" id="search" class="search" placeholder="search a book">
+        </div>
+    </div>
+
+    <div class="hero">
+        <h1>Delete Product</h1>
+        <p> </p>
+        <div class="space">
+            <form action="#" method="get" id="myForm">
+                <div>
+                    <label for="productId"></label>
+                    <input type="text" name="productId" id="productId" placeholder="Enter product ID" required>
+                </div>
+                <button type="submit">Approve</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <ul>
+            <li><a href="./../home.html">Home</a></li>
+            <li><a href="productsPage.html">Products</a></li>
+            <li><a href="./../orders/orderPage.html">Order</a></li>
+            <li><a href="./../basket.html">Basket</a></li>
+        </ul>
+    </div>
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

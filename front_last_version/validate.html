@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Register</title>
+	<script>
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}	
+         document.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById("myForm").addEventListener("submit", function (e) {
+               e.preventDefault() // Cancel the default action
+			   
+			   const data = { pending_user_id: getCookie('userid'), validation_code:document.getElementById('validate').value,role:"customer",email:getCookie('email')};
+               fetch('http://127.0.0.1:8001/auth/activate-user/', {
+					  method: "POST", // *GET, POST, PUT, DELETE, etc.
+					mode: "cors", // no-cors, *cors, same-origin
+					cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: "same-origin", // include, *same-origin, omit
+					headers: {
+					  "Content-Type": "application/json",
+					  "lang":"en"
+					  // 'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					redirect: "follow", // manual, *follow, error
+					referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+					body: JSON.stringify(data), // body data type must match "Content-Type" header
+                  })
+                  .then(resp => resp.json()) // or, resp.json(), etc.
+                  .then(data => {
+		     
+			window.location.href = 'login.html';
+                  })
+                  .catch(error => {
+                     console.error(error);
+                  });
+            });
+         });
+      </script>	
+</head>
+<body>
+    <div class="navBar" style="justify-content: start;padding-left: 20px;">
+        <a class="logo"  href="home.html">
+            <span>Library</span>
+            <span>Online Store</span>
+        </a>
+    </div>
+
+    <div class="hero">
+        <h1>Validate your E-mail</h1>
+           <div class="space">
+               <form action="#"  id="myForm" method="POST">
+                   <div class="validate">
+                       <label for="validate"></label>
+                       <input type="validate" name="validate" id="validate" placeholder="Enter your code" required>
+                   </div>
+                   <button type="submit">validate</button>
+               </form>
+           </div>
+    </div>
+
+    <div class="footer">
+        <span>Copyright Reserved 2023</span>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>
