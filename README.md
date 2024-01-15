@@ -43,7 +43,3 @@ Contributions to the project are welcome. To contribute, follow these steps:
 Ahmad Allahham ahmall-0@student.ltu.se
 
 
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
